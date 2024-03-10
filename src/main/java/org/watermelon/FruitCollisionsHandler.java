@@ -1,9 +1,9 @@
-package org.example;
+package org.watermelon;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
-import com.lucenstuff.fxglgames.suikagame.fruits.*;
+import org.watermelon.fruits.*;
 import javafx.geometry.Point2D;
 
 public class FruitCollisionsHandler {

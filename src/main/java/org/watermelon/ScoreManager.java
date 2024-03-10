@@ -1,11 +1,11 @@
-package org.example;
+package org.watermelon;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public class ScoreManager {
 
-    private static IntegerProperty gameScore = new SimpleIntegerProperty(0);
+    private static final IntegerProperty gameScore = new SimpleIntegerProperty(0);
 
     public static IntegerProperty getGameScoreProperty() {
         return gameScore;
@@ -23,7 +23,4 @@ public class ScoreManager {
         gameScore.set(gameScore.get() + value);
     }
 
-    public static void resetGameScore() {
-        gameScore.set(0);
-    }
 }

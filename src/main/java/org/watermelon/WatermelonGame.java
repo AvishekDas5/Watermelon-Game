@@ -1,4 +1,4 @@
-package org.example;
+package org.watermelon;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
@@ -9,13 +9,12 @@ import javafx.geometry.Point2D;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
-
-import java.awt.*;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
-public class SuikaGame extends GameApplication {
+public class WatermelonGame extends GameApplication {
     int APP_WIDTH = 1280;
     int APP_HEIGHT = 720;
     private final Point2D rectanglePosition = new Point2D(0, 0);
@@ -29,8 +28,10 @@ public class SuikaGame extends GameApplication {
         settings.setDeveloperMenuEnabled(true);
         settings.setWidth(APP_WIDTH);
         settings.setHeight(APP_HEIGHT);
-        settings.setTitle("Suika FXGL");
+        settings.setTitle("WaterMelon Game");
         settings.setVersion("0.1");
+        settings.setManualResizeEnabled(true);
+        settings.setFullScreenAllowed(true);
     }
     protected void initGame() {
 
@@ -73,6 +74,7 @@ public class SuikaGame extends GameApplication {
     }
 
     protected void initUI() {
+
         fruitFactory.nextFruitImageView = new ImageView();
         fruitFactory.nextFruitImageView.setFitWidth(60);
         fruitFactory.nextFruitImageView.setFitHeight(60);
@@ -91,6 +93,7 @@ public class SuikaGame extends GameApplication {
         scoreText.setY(160);
         scoreText.setStroke(Color.BLACK);
         scoreText.setStrokeWidth(2);
+        scoreText.setTextAlignment(TextAlignment.CENTER);
         getGameScene().addUINode(scoreText);
 
         Entity ringOfFruits = FXGL.entityBuilder()
@@ -98,7 +101,7 @@ public class SuikaGame extends GameApplication {
                 .at(1000, 400)
                 .buildAndAttach();
 
-        Entity NextFruitBuuble = FXGL.entityBuilder()
+        Entity NextFruitBubble = FXGL.entityBuilder()
                 .view("next_fruit_view.png")
                 .at(1040, 50)
                 .buildAndAttach();

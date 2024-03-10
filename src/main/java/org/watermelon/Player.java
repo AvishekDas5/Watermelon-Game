@@ -1,4 +1,4 @@
-package org.example;
+package org.watermelon;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
@@ -12,7 +12,7 @@ public class Player {
     private Entity rectangle;
     private Entity line;
     private long lastClickTime;
-    private final long cooldownDuration = 1000;
+    private final long coolDownDuration = 1000;
     private final double lineHeight = 540;
     private double MIN_X;
     private double MAX_X;
@@ -50,7 +50,7 @@ public class Player {
 
         FXGL.getInput().addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             long currentTime = System.currentTimeMillis();
-            if (currentTime - lastClickTime >= cooldownDuration) {
+            if (currentTime - lastClickTime >= coolDownDuration) {
                 lastClickTime = currentTime;
                 Entity newFruit = fruitFactory.spawnFruitAt(rectangle.getPosition().add((rectangle.getWidth() / 2 - fruitFactory.currentFruitImageView.getImage().getWidth() / 2), 0));
                 FXGL.getGameWorld().addEntity(newFruit);

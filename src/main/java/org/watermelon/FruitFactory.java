@@ -1,8 +1,8 @@
-package org.example;
+package org.watermelon;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.lucenstuff.fxglgames.suikagame.fruits.*;
+import org.watermelon.fruits.*;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,22 +12,6 @@ public class FruitFactory {
     private final Queue<Fruit> fruitQueue = new LinkedList<>();
     public ImageView nextFruitImageView;
     public ImageView currentFruitImageView;
-
-    public ImageView getNextFruitImageView() {
-        return nextFruitImageView;
-    }
-
-    public void setNextFruitImageView(ImageView nextFruitImageView) {
-        this.nextFruitImageView = nextFruitImageView;
-    }
-
-    public ImageView getCurrentFruitImageView() {
-        return currentFruitImageView;
-    }
-
-    public void setCurrentFruitImageView(ImageView currentFruitImageView) {
-        this.currentFruitImageView = currentFruitImageView;
-    }
 
 
     public Entity spawnFruitAt(Point2D currentPosition) {

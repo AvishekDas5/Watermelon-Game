@@ -1,4 +1,4 @@
-package org.example;
+package org.watermelon;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
