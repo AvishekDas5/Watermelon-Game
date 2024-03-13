@@ -2,11 +2,13 @@ package org.watermelon;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import org.watermelon.fruits.*;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.watermelon.fruits.*;
+
 import java.util.*;
+
 public class FruitFactory {
 
     private final Queue<Fruit> fruitQueue = new LinkedList<>();

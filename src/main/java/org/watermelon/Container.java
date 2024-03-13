@@ -1,7 +1,6 @@
 package org.watermelon;
 
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import javafx.scene.paint.Color;
@@ -28,8 +27,8 @@ public class Container {
         rightWallPhysics = new PhysicsComponent();
     }
 
-    public ContainerEntity createContainer() {
-        Entity floor = FXGL.entityBuilder()
+    public void createContainer() {
+        FXGL.entityBuilder()
                 .type(ContainerType.FLOOR)
                 .at(0, floorHeight)
                 .viewWithBBox(new javafx.scene.shape.Rectangle(floorWidth, wallThickness, Color.TRANSPARENT))
@@ -37,38 +36,37 @@ public class Container {
                 .with(containerPhysics)
                 .buildAndAttach();
 
-        Entity leftWall = FXGL.entityBuilder()
+        FXGL.entityBuilder()
                 .type(ContainerType.WALL)
                 .at(387.5, floorHeight - wallHeight)
                 .viewWithBBox(new javafx.scene.shape.Rectangle(wallThickness, wallHeight, Color.TRANSPARENT))
                 .with(new PhysicsComponent(), new CollidableComponent(true))
                 .buildAndAttach();
 
-        Entity rightWall = FXGL.entityBuilder()
+        FXGL.entityBuilder()
                 .type(ContainerType.WALL)
                 .at(getAppWidth() - wallThickness - 387.5, floorHeight - wallHeight)
                 .viewWithBBox(new Rectangle(wallThickness, wallHeight, Color.TRANSPARENT))
                 .with(rightWallPhysics, new CollidableComponent(true))
                 .buildAndAttach();
 
-        Entity looseCollider = FXGL.entityBuilder()
+        FXGL.entityBuilder()
                 .type(ContainerType.LOOSE_COLLIDER)
                 .at(0, 130)
                 .viewWithBBox(new Rectangle(floorWidth, 15, Color.TRANSPARENT))
                 .with(new CollidableComponent(true))
                 .buildAndAttach();
 
-        Entity backgroundImg = FXGL.entityBuilder()
+        FXGL.entityBuilder()
                 .view("background_view.png")
                 .buildAndAttach();
 
-        Entity ContainerImg = FXGL.entityBuilder()
+        FXGL.entityBuilder()
                 .view("container_view.png")
                 .at(387.5, 135)
                 .zIndex(10)
                 .buildAndAttach();
 
-        return new ContainerEntity(floor, leftWall, rightWall);
     }
 
 }

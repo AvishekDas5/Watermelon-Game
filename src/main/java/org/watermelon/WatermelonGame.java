@@ -17,6 +17,8 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class WatermelonGame extends GameApplication {
     int APP_WIDTH = 1280;
     int APP_HEIGHT = 720;
+    static String playerName;
+    private boolean dialogShown = false;
     private final Point2D rectanglePosition = new Point2D(0, 0);
     FruitType[] fruitTypes = {
             FruitType.CHERRY, FruitType.STRAWBERRY, FruitType.GRAPE, FruitType.LEMON, FruitType.ORANGE, FruitType.APPLE, FruitType.PEAR, FruitType.PEACH, FruitType.PINEAPPLE, FruitType.MELON, FruitType.WATERMELON
@@ -32,18 +34,20 @@ public class WatermelonGame extends GameApplication {
         settings.setVersion("0.1");
         settings.setManualResizeEnabled(true);
         settings.setFullScreenAllowed(true);
+        settings.setGameMenuEnabled(true);
     }
     protected void initGame() {
-
         double wallThickness = 1;
-        double floorHeight = getAppHeight() - getAppHeight()*0.0833;
-        double wallHeight = getAppHeight()*0.752;
-        double floorWidth = getAppWidth() ;
+        double floorHeight = getAppHeight() - getAppHeight() * 0.0833;
+        double wallHeight = getAppHeight() * 0.752;
+        double floorWidth = getAppWidth();
 
         Container container = new Container(wallThickness, floorHeight, wallHeight, floorWidth);
-        ContainerEntity containerEntity = container.createContainer();
-        Player player = new Player(fruitFactory);
+        container.createContainer();
+        new Player(fruitFactory);
+
     }
+
     FruitFactory fruitFactory = new FruitFactory();
 
     protected void initPhysics() {
@@ -51,10 +55,10 @@ public class WatermelonGame extends GameApplication {
         FruitCollisionsHandler.initCollisionHandlers();
 
         for (FruitType fruitType : fruitTypes) {
-            FXGL.getPhysicsWorld().addCollisionHandler(new CollisionHandler(fruitType, ContainerType.LOOSE_COLLIDER) {
+            getPhysicsWorld().addCollisionHandler(new CollisionHandler(fruitType, ContainerType.LOOSE_COLLIDER) {
                 @Override
                 protected void onCollisionBegin(Entity fruit, Entity looseCollider) {
-                    FXGL.getGameTimer().runOnceAfter(() -> {
+                    getGameTimer().runOnceAfter(() -> {
                         if (fruit.isActive() && fruit.isColliding(looseCollider)) {
                             endGame();
                         }
@@ -65,16 +69,31 @@ public class WatermelonGame extends GameApplication {
     }
 
     private void endGame() {
-        FXGL.getDialogService().showMessageBox("Game Over, your score is: " + ScoreManager.getGameScore()+"\n Do you want to play again? ", () -> {
+        getDialogService().showMessageBox("Well Player "+playerName+"!\nGame Over, your score is: " + ScoreManager.getGameScore()+"\n Do you want to play again? ", () -> {
             ScoreManager.setGameScore(0);
-            for (Enum  fruitType : FruitType.values()) {
+            for (FruitType  fruitType : FruitType.values()) {
                 getGameWorld().getEntitiesByType(fruitType).forEach(Entity::removeFromWorld);
+            }
+        });
+    }
+    @Override
+    protected void onUpdate(double tpf) {
+        if (!dialogShown) {
+            showDialog();
+            dialogShown = true;
+        }
+        // Update game logic here
+    }
+
+    private void showDialog() {
+        getDialogService().showInputBox("Enter your name:", player -> {
+            if (!player.isEmpty()) {
+                playerName = player;
             }
         });
     }
 
     protected void initUI() {
-
         fruitFactory.nextFruitImageView = new ImageView();
         fruitFactory.nextFruitImageView.setFitWidth(60);
         fruitFactory.nextFruitImageView.setFitHeight(60);
@@ -96,17 +115,17 @@ public class WatermelonGame extends GameApplication {
         scoreText.setTextAlignment(TextAlignment.CENTER);
         getGameScene().addUINode(scoreText);
 
-        Entity ringOfFruits = FXGL.entityBuilder()
+        entityBuilder()
                 .view("ring_view.png")
                 .at(1000, 400)
                 .buildAndAttach();
 
-        Entity NextFruitBubble = FXGL.entityBuilder()
+        entityBuilder()
                 .view("next_fruit_view.png")
                 .at(1040, 50)
                 .buildAndAttach();
 
-        Entity ScoreBubble = FXGL.entityBuilder()
+        entityBuilder()
                 .view("score_view.png")
                 .at(40, 50)
                 .buildAndAttach();
