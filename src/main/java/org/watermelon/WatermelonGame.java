@@ -2,7 +2,6 @@ package org.watermelon;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
 import javafx.geometry.Point2D;
@@ -19,7 +18,9 @@ public class WatermelonGame extends GameApplication {
     int APP_HEIGHT = 720;
     static String playerName;
     private boolean dialogShown = false;
+    private boolean newHighScore = false;
     private final Point2D rectanglePosition = new Point2D(0, 0);
+    int highScore;
     FruitType[] fruitTypes = {
             FruitType.CHERRY, FruitType.STRAWBERRY, FruitType.GRAPE, FruitType.LEMON, FruitType.ORANGE, FruitType.APPLE, FruitType.PEAR, FruitType.PEACH, FruitType.PINEAPPLE, FruitType.MELON, FruitType.WATERMELON
     };
@@ -69,10 +70,12 @@ public class WatermelonGame extends GameApplication {
     }
 
     private void endGame() {
+        HighScoreManager.saveHighScore(playerName,ScoreManager.getGameScore());
         getDialogService().showMessageBox("Well Player "+playerName+"!\nGame Over, your score is: " + ScoreManager.getGameScore()+"\n Do you want to play again? ", () -> {
             ScoreManager.setGameScore(0);
             for (FruitType  fruitType : FruitType.values()) {
                 getGameWorld().getEntitiesByType(fruitType).forEach(Entity::removeFromWorld);
+                HighScoreManager.loadHighScores();
             }
         });
     }
@@ -82,7 +85,10 @@ public class WatermelonGame extends GameApplication {
             showDialog();
             dialogShown = true;
         }
-        // Update game logic here
+        if(!newHighScore && highScore<ScoreManager.getGameScore()){
+            newHighScore = true;
+
+        }
     }
 
     private void showDialog() {
@@ -106,7 +112,7 @@ public class WatermelonGame extends GameApplication {
         fruitFactory.currentFruitImageView.setY(rectanglePosition.getY());
         getGameScene().addUINode(fruitFactory.currentFruitImageView);
 
-        Text scoreText = FXGL.getUIFactoryService().newText("", Color.WHITE, 60);
+        Text scoreText = getUIFactoryService().newText("", Color.WHITE, 60);
         scoreText.textProperty().bind(ScoreManager.getGameScoreProperty().asString());
         scoreText.setX(95);
         scoreText.setY(160);
@@ -114,6 +120,10 @@ public class WatermelonGame extends GameApplication {
         scoreText.setStrokeWidth(2);
         scoreText.setTextAlignment(TextAlignment.CENTER);
         getGameScene().addUINode(scoreText);
+
+        HighScoreManager.loadHighScores();
+        highScore = HighScoreManager.getHighScore();
+
 
         entityBuilder()
                 .view("ring_view.png")
