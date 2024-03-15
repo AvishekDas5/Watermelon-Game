@@ -13,12 +13,12 @@ import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 
 public abstract class Fruit {
-    String textureName;
-    double bBoxRadius;
-    PhysicsComponent fruitPhysics = new PhysicsComponent();
+    final String textureName;
+    final double bBoxRadius;
+    PhysicsComponent fruitPhysics;
     Point2D position;
 
-    FruitType fruitType;
+    final FruitType fruitType;
 
     public Fruit(String textureName, double bBoxRadius, FruitType fruitType) {
 

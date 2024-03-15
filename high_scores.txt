@@ -1,6 +1,5 @@
-Avishek,2085
-Rowan,185
-Bowman,1092
+Avishek,2086
+Ram,1093
+Kris,890
 GigaChad,2085
-Omar,806
-Mama,1
+Mangowo,900

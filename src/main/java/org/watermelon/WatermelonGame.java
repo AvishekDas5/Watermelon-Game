@@ -1,9 +1,11 @@
 package org.watermelon;
 
+import com.almasb.fxgl.animation.Interpolators;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
+import com.almasb.fxgl.texture.Texture;
 import javafx.geometry.Point2D;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -14,14 +16,16 @@ import javafx.util.Duration;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class WatermelonGame extends GameApplication {
-    int APP_WIDTH = 1280;
-    int APP_HEIGHT = 720;
+    final int APP_WIDTH = 1280;
+    final int APP_HEIGHT = 720;
     static String playerName;
     private boolean dialogShown = false;
     private boolean newHighScore = false;
     private final Point2D rectanglePosition = new Point2D(0, 0);
+    private Texture highScoreTexture;
+
     int highScore;
-    FruitType[] fruitTypes = {
+    final FruitType[] fruitTypes = {
             FruitType.CHERRY, FruitType.STRAWBERRY, FruitType.GRAPE, FruitType.LEMON, FruitType.ORANGE, FruitType.APPLE, FruitType.PEAR, FruitType.PEACH, FruitType.PINEAPPLE, FruitType.MELON, FruitType.WATERMELON
     };
 
@@ -43,13 +47,17 @@ public class WatermelonGame extends GameApplication {
         double wallHeight = getAppHeight() * 0.752;
         double floorWidth = getAppWidth();
 
+        Text text = getUIFactoryService().newText("", Color.BLUE, 24.0);
+
+        addUINode(text, 0, 150);
+
         Container container = new Container(wallThickness, floorHeight, wallHeight, floorWidth);
         container.createContainer();
         new Player(fruitFactory);
 
     }
 
-    FruitFactory fruitFactory = new FruitFactory();
+    final FruitFactory fruitFactory = new FruitFactory();
 
     protected void initPhysics() {
 
@@ -86,11 +94,30 @@ public class WatermelonGame extends GameApplication {
             dialogShown = true;
         }
         if(!newHighScore && highScore<ScoreManager.getGameScore()){
+            showHighScoreAnimation();
             newHighScore = true;
-
+            play("newHighScore.wav");
         }
     }
+    private void showHighScoreAnimation() {
+        highScoreTexture = texture("HighScore.png");
 
+        // Set initial position above the screen
+        highScoreTexture.setTranslateX((double) getAppWidth() / 2 - highScoreTexture.getWidth() / 2);
+        highScoreTexture.setTranslateY(-highScoreTexture.getHeight());
+
+        // Add the texture to the game scene
+        addUINode(highScoreTexture);
+        animationBuilder()
+                .duration(Duration.seconds(2))
+                .interpolator(Interpolators.BOUNCE.EASE_OUT())
+                .onFinished(() -> removeUINode(highScoreTexture)) // Remove the texture after the animation is complete
+                .translate(highScoreTexture)
+                .to(new Point2D(500,500))
+                .buildAndPlay();
+
+
+    }
     private void showDialog() {
         getDialogService().showInputBox("Enter your name:", player -> {
             if (!player.isEmpty()) {
