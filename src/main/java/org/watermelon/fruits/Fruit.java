@@ -15,7 +15,7 @@ import javafx.scene.image.Image;
 public abstract class Fruit {
     final String textureName;
     final double bBoxRadius;
-    PhysicsComponent fruitPhysics;
+    final PhysicsComponent fruitPhysics;
     Point2D position;
 
     final FruitType fruitType;

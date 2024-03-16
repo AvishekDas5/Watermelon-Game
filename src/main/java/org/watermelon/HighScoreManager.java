@@ -14,7 +14,6 @@ import static java.util.Collections.reverseOrder;
 public class HighScoreManager {
     private static final String HIGH_SCORE_FILE = "high_scores.txt";
     private static final int MAX_SCORES_TO_KEEP = 5;
-
     private static List<HighScore> highScores = new ArrayList<>();
 
     public static void loadHighScores() {
@@ -72,10 +71,6 @@ public class HighScoreManager {
         highScores.add(new HighScore(name, score));
 
         // Sort the high scores
-        highScores.sort(reverseOrder());
-
-        // Trim the list to keep only the top 5 scores
-        highScores = highScores.subList(0, Math.min(highScores.size(), MAX_SCORES_TO_KEEP));
 
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(HIGH_SCORE_FILE));
@@ -87,6 +82,10 @@ public class HighScoreManager {
         } catch (IOException e) {
             getDialogService().showMessageBox(e.getMessage());
         }
+        highScores.sort(reverseOrder());
+
+        // Trim the list to keep only the top 5 scores
+        highScores = highScores.subList(0, Math.min(highScores.size(), MAX_SCORES_TO_KEEP));
     }
 
     private static class HighScore implements Comparable<HighScore> {

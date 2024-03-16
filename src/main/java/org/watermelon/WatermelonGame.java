@@ -23,12 +23,8 @@ public class WatermelonGame extends GameApplication {
     private boolean newHighScore = false;
     private final Point2D rectanglePosition = new Point2D(0, 0);
     private Texture highScoreTexture;
-
     int highScore;
-    final FruitType[] fruitTypes = {
-            FruitType.CHERRY, FruitType.STRAWBERRY, FruitType.GRAPE, FruitType.LEMON, FruitType.ORANGE, FruitType.APPLE, FruitType.PEAR, FruitType.PEACH, FruitType.PINEAPPLE, FruitType.MELON, FruitType.WATERMELON
-    };
-
+    final FruitFactory fruitFactory = new FruitFactory();
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setAppIcon("watermelon_view.png");
@@ -54,16 +50,10 @@ public class WatermelonGame extends GameApplication {
         Container container = new Container(wallThickness, floorHeight, wallHeight, floorWidth);
         container.createContainer();
         new Player(fruitFactory);
-
     }
-
-    final FruitFactory fruitFactory = new FruitFactory();
-
     protected void initPhysics() {
-
         FruitCollisionsHandler.initCollisionHandlers();
-
-        for (FruitType fruitType : fruitTypes) {
+        for (FruitType fruitType : FruitType.values()) {
             getPhysicsWorld().addCollisionHandler(new CollisionHandler(fruitType, ContainerType.LOOSE_COLLIDER) {
                 @Override
                 protected void onCollisionBegin(Entity fruit, Entity looseCollider) {
@@ -76,7 +66,6 @@ public class WatermelonGame extends GameApplication {
             });
         }
     }
-
     private void endGame() {
         HighScoreManager.saveHighScore(playerName,ScoreManager.getGameScore());
         getDialogService().showMessageBox("Well Player "+playerName+"!\nGame Over, your score is: " + ScoreManager.getGameScore()+"\n Do you want to play again? ", () -> {
@@ -115,8 +104,6 @@ public class WatermelonGame extends GameApplication {
                 .translate(highScoreTexture)
                 .to(new Point2D(500,500))
                 .buildAndPlay();
-
-
     }
     private void showDialog() {
         getDialogService().showInputBox("Enter your name:", player -> {
@@ -125,7 +112,6 @@ public class WatermelonGame extends GameApplication {
             }
         });
     }
-
     protected void initUI() {
         fruitFactory.nextFruitImageView = new ImageView();
         fruitFactory.nextFruitImageView.setFitWidth(60);
@@ -151,7 +137,6 @@ public class WatermelonGame extends GameApplication {
         HighScoreManager.loadHighScores();
         highScore = HighScoreManager.getHighScore();
 
-
         entityBuilder()
                 .view("ring_view.png")
                 .at(1000, 400)
@@ -169,7 +154,6 @@ public class WatermelonGame extends GameApplication {
 
         fruitFactory.initFruits();
     }
-
     public static void main(String[] args) {
         launch(args);
     }

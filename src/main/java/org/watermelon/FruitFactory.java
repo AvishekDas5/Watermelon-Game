@@ -6,7 +6,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.watermelon.fruits.*;
-
 import java.util.*;
 
 public class FruitFactory {
@@ -14,12 +13,9 @@ public class FruitFactory {
     private final Queue<Fruit> fruitQueue = new LinkedList<>();
     public ImageView nextFruitImageView;
     public ImageView currentFruitImageView;
-
-
     public Entity spawnFruitAt(Point2D currentPosition) {
-        if (fruitQueue.isEmpty()) {
+        if (fruitQueue.isEmpty())
             fillFruitQueue(currentPosition);
-        }
 
         Fruit fruitToSpawn = fruitQueue.poll();
 
@@ -38,25 +34,35 @@ public class FruitFactory {
     private void fillFruitQueue(Point2D position) {
         fruitQueue.addAll(Arrays.asList(
                 new Cherry(position),
-                new Grape(position),
-                new Lemon(position),
-                new Strawberry(position),
-                new Orange(position),
-                new Apple(position)
+                new Cherry(position),
+                new Cherry(position),
+                new Strawberry(position)
         ));
-        Collections.shuffle((List<?>) fruitQueue);
     }
 
     private void enqueueRandomFruit(Point2D position) {
+        int poolSize,currentScore = ScoreManager.getGameScore();
         Fruit[] fruits = {
                 new Cherry(position),
+                new Strawberry(position),
                 new Grape(position),
                 new Lemon(position),
-                new Strawberry(position),
                 new Orange(position),
                 new Apple(position)
         };
-        int randomIndex = new Random().nextInt(fruits.length);
+        if(currentScore<5)
+            poolSize = 1;
+        else if (currentScore<10)
+            poolSize = 2;
+        else if(currentScore<50)
+            poolSize = 3;
+        else if(currentScore < 100)
+            poolSize = 4;
+        else if(currentScore < 500)
+            poolSize = 5;
+        else
+            poolSize = fruits.length;
+        int randomIndex = new Random().nextInt(poolSize);
         fruitQueue.offer(fruits[randomIndex]);
     }
 
