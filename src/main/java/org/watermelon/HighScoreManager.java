@@ -15,6 +15,7 @@ public class HighScoreManager {
     private static final String HIGH_SCORE_FILE = "high_scores.txt";
     private static final int MAX_SCORES_TO_KEEP = 5;
     private static List<HighScore> highScores = new ArrayList<>();
+    private static Text highScore;
 
     public static void loadHighScores() {
         try {
@@ -28,22 +29,15 @@ public class HighScoreManager {
                     String name = parts[0];
                     int score = Integer.parseInt(parts[1]);
                     HighScore newScore = new HighScore(name, score);
-
-                    // Add new score to the list if there's space or if it's greater than the lowest score
-                    if (highScores.size() < MAX_SCORES_TO_KEEP || newScore.compareTo(highScores.get(MAX_SCORES_TO_KEEP - 1)) > 0) {
-                        highScores.add(newScore);
-
-                        // Sort the list if needed
-                        Collections.sort(highScores);
-
-                        // Keep only the top 5 scores
-                        highScores = highScores.subList(0, Math.min(highScores.size(), MAX_SCORES_TO_KEEP));
-                    }
+                    highScores.add(newScore);
                 }
+                Collections.sort(highScores);
+                // Keep only the top 5 scores
+                highScores = highScores.subList(0, Math.min(highScores.size(), MAX_SCORES_TO_KEEP));
                 reader.close();
 
                 // Display the top 5 scores
-                Text highScore = getUIFactoryService().newText("", Color.WHITE, 16);
+                highScore = getUIFactoryService().newText("", Color.WHITE, 16);
                 highScore.setTranslateX(50);
                 highScore.setTranslateY(500);
                 highScore.setStroke(Color.BLACK);
@@ -63,14 +57,18 @@ public class HighScoreManager {
         }
     }
 
+    public static void reload(){
+        getGameScene().removeUINode(highScore);
+        loadHighScores();
+    }
+
     public static int getHighScore(){
         return highScores.get(0).getScore();
     }
 
     public static void saveHighScore(String name, int score) {
         highScores.add(new HighScore(name, score));
-
-        // Sort the high scores
+        highScores.sort(reverseOrder());
 
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(HIGH_SCORE_FILE));
@@ -82,10 +80,7 @@ public class HighScoreManager {
         } catch (IOException e) {
             getDialogService().showMessageBox(e.getMessage());
         }
-        highScores.sort(reverseOrder());
 
-        // Trim the list to keep only the top 5 scores
-        highScores = highScores.subList(0, Math.min(highScores.size(), MAX_SCORES_TO_KEEP));
     }
 
     private static class HighScore implements Comparable<HighScore> {

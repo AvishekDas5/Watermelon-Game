@@ -36,6 +36,7 @@ public class WatermelonGame extends GameApplication {
         settings.setManualResizeEnabled(true);
         settings.setFullScreenAllowed(true);
         settings.setGameMenuEnabled(true);
+        settings.setFullScreenFromStart(true);
     }
     protected void initGame() {
         double wallThickness = 1;
@@ -68,11 +69,11 @@ public class WatermelonGame extends GameApplication {
     }
     private void endGame() {
         HighScoreManager.saveHighScore(playerName,ScoreManager.getGameScore());
-        getDialogService().showMessageBox("Well Player "+playerName+"!\nGame Over, your score is: " + ScoreManager.getGameScore()+"\n Do you want to play again? ", () -> {
+        getDialogService().showMessageBox("Well Played "+playerName+"!\nGame Over, your score is: " + ScoreManager.getGameScore()+"\n Do you want to play again? ", () -> {
             ScoreManager.setGameScore(0);
             for (FruitType  fruitType : FruitType.values()) {
                 getGameWorld().getEntitiesByType(fruitType).forEach(Entity::removeFromWorld);
-                HighScoreManager.loadHighScores();
+                HighScoreManager.reload();
             }
         });
     }
@@ -120,14 +121,16 @@ public class WatermelonGame extends GameApplication {
         fruitFactory.nextFruitImageView.setY(120);
         getGameScene().addUINode(fruitFactory.nextFruitImageView);
 
+        getGameScene().setCursorInvisible();
+
         fruitFactory.currentFruitImageView = new ImageView();
         fruitFactory.currentFruitImageView.setX(rectanglePosition.getX());
         fruitFactory.currentFruitImageView.setY(rectanglePosition.getY());
         getGameScene().addUINode(fruitFactory.currentFruitImageView);
 
-        Text scoreText = getUIFactoryService().newText("", Color.WHITE, 60);
+        Text scoreText = getUIFactoryService().newText("", Color.WHITE, 55);
         scoreText.textProperty().bind(ScoreManager.getGameScoreProperty().asString());
-        scoreText.setX(95);
+        scoreText.setX(87);
         scoreText.setY(160);
         scoreText.setStroke(Color.BLACK);
         scoreText.setStrokeWidth(2);
