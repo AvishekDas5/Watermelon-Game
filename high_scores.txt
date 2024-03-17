@@ -1,5 +1,6 @@
 Chameli Chatori,87
 Golu Gudgudi,168
 Bablu Bandar,243
-Chintu Chaturvedi,502
 Pappu Paratha,340
+Chintu Chaturvedi,502
+TRICKY,2609

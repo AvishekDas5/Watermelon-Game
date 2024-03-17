@@ -52,7 +52,7 @@ public class Container {
 
         FXGL.entityBuilder()
                 .type(ContainerType.LOOSE_COLLIDER)
-                .at(0, 125)
+                .at(0, 120)
                 .viewWithBBox(new Rectangle(floorWidth, 15, Color.TRANSPARENT))
                 .with(new CollidableComponent(true))
                 .buildAndAttach();

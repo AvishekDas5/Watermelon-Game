@@ -3,6 +3,8 @@ package org.watermelon;
 import com.almasb.fxgl.animation.Interpolators;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.app.scene.IntroScene;
+import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.texture.Texture;
@@ -12,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
+import org.jetbrains.annotations.NotNull;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
@@ -27,7 +30,7 @@ public class WatermelonGame extends GameApplication {
     final FruitFactory fruitFactory = new FruitFactory();
     @Override
     protected void initSettings(GameSettings settings) {
-        settings.setAppIcon("watermelon_view.png");
+        settings.setAppIcon("Watermelon.png");
         settings.setDeveloperMenuEnabled(true);
         settings.setWidth(APP_WIDTH);
         settings.setHeight(APP_HEIGHT);
@@ -37,6 +40,14 @@ public class WatermelonGame extends GameApplication {
         settings.setFullScreenAllowed(true);
         settings.setGameMenuEnabled(true);
         settings.setFullScreenFromStart(true);
+        settings.setIntroEnabled(true);
+        settings.setSceneFactory(new SceneFactory() {
+            @NotNull
+            @Override
+            public IntroScene newIntro() {
+                return new MyIntroScene();
+            }
+        });
     }
     protected void initGame() {
         double wallThickness = 1;
@@ -129,13 +140,18 @@ public class WatermelonGame extends GameApplication {
         getGameScene().addUINode(fruitFactory.currentFruitImageView);
 
         Text scoreText = getUIFactoryService().newText("", Color.WHITE, 55);
-        scoreText.textProperty().bind(ScoreManager.getGameScoreProperty().asString());
-        scoreText.setX(87);
-        scoreText.setY(160);
         scoreText.setStroke(Color.BLACK);
         scoreText.setStrokeWidth(2);
         scoreText.setTextAlignment(TextAlignment.CENTER);
+        scoreText.textProperty().bind(ScoreManager.getGameScoreProperty().asString());
+        scoreText.setX(90);
+        scoreText.setY(160);
         getGameScene().addUINode(scoreText);
+        // Adjust the score text position dynamically based on the length of the score string
+        ScoreManager.getGameScoreProperty().addListener((obs, oldScore, newScore) -> {
+            double xOffset = (newScore.toString().length() - 1) * 8;
+            scoreText.setX(90 - xOffset);
+        });
 
         HighScoreManager.loadHighScores();
         highScore = HighScoreManager.getHighScore();
