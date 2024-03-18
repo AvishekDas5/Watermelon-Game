@@ -9,20 +9,11 @@ import javafx.geometry.Point2D;
 public class FruitCollisionsHandler {
 
     public static void initCollisionHandlers() {
-        FXGL.getPhysicsWorld().addCollisionHandler(getCollisionHandler(FruitType.CHERRY, FruitType.CHERRY, 1));
-        FXGL.getPhysicsWorld().addCollisionHandler(getCollisionHandler(FruitType.STRAWBERRY, FruitType.STRAWBERRY, 4));
-        FXGL.getPhysicsWorld().addCollisionHandler(getCollisionHandler(FruitType.GRAPE, FruitType.GRAPE, 9));
-        FXGL.getPhysicsWorld().addCollisionHandler(getCollisionHandler(FruitType.LEMON, FruitType.LEMON, 13));
-        FXGL.getPhysicsWorld().addCollisionHandler(getCollisionHandler(FruitType.ORANGE, FruitType.ORANGE, 20));
-        FXGL.getPhysicsWorld().addCollisionHandler(getCollisionHandler(FruitType.APPLE, FruitType.APPLE, 27));
-        FXGL.getPhysicsWorld().addCollisionHandler(getCollisionHandler(FruitType.PEAR, FruitType.PEAR, 35));
-        FXGL.getPhysicsWorld().addCollisionHandler(getCollisionHandler(FruitType.PEACH, FruitType.PEACH, 44));
-        FXGL.getPhysicsWorld().addCollisionHandler(getCollisionHandler(FruitType.PINEAPPLE, FruitType.PINEAPPLE, 54));
-        FXGL.getPhysicsWorld().addCollisionHandler(getCollisionHandler(FruitType.MELON, FruitType.MELON, 65));
-        FXGL.getPhysicsWorld().addCollisionHandler(getCollisionHandler(FruitType.WATERMELON, FruitType.WATERMELON, 77));
+        for (FruitType type : FruitType.values()) {
+            FXGL.getPhysicsWorld().addCollisionHandler(getCollisionHandler(type, type));
+        }
     }
-
-    public static CollisionHandler getCollisionHandler(FruitType type1, FruitType type2, int score) {
+    public static CollisionHandler getCollisionHandler(FruitType type1, FruitType type2) {
         return new CollisionHandler(type1, type2) {
             @Override
             protected void onCollisionBegin(Entity e1, Entity e2) {
@@ -34,11 +25,13 @@ public class FruitCollisionsHandler {
                 FXGL.getGameWorld().addEntity(newFruit);
                 e1.removeFromWorld();
                 e2.removeFromWorld();
+                int score = (type1.ordinal() + 1) * 2;
                 ScoreManager.addToGameScore(score);
                 FXGL.play("fruit_merge.wav");
             }
         };
     }
+
     public static Entity createFruitFromType(FruitType type, Point2D position) {
         switch (type) {
             case STRAWBERRY:
@@ -65,5 +58,4 @@ public class FruitCollisionsHandler {
                 return null;
         }
     }
-
 }
