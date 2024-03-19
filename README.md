@@ -51,5 +51,3 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 Enjoy playing the Watermelon Game! If you have any feedback or suggestions, please don't hesitate to reach out.
 
 ---
-
-Feel free to customize the Readme.md further to suit your preferences or add any additional sections you find necessary. Let me know if there's anything else I can assist you with!
