@@ -46,7 +46,7 @@ The Watermelon Game is created by [AvishekDas5](https://github.com/AvishekDas5).
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 Enjoy playing the Watermelon Game! If you have any feedback or suggestions, please don't hesitate to reach out.
 
