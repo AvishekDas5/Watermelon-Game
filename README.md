@@ -42,7 +42,7 @@ The Watermelon Game is developed using Java and the FXGL game development librar
 
 ## Credits
 
-The Watermelon Game is created by [AvishekDas5]. Special thanks to [lucenstuff].
+The Watermelon Game is created by [AvishekDas5](https://github.com/AvishekDas5). Special thanks to [lucenstuff].
 
 ## License
 
